@@ -1,23 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { checkLottery, LotteryResult } from "@/lib/api";
+import { checkLottery, getLatestLottery, LotteryResult } from "@/lib/api";
 import { motion } from "framer-motion";
 import { Search, Trophy } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ResultPopup } from "./ResultPopup";
 import { ShareButtons } from "./ShareButtons";
-import { trpc } from "@/lib/trpc";
 
 export function LatestResult() {
-  const { data: result, isLoading } = trpc.lottery.getLatest.useQuery();
+  const [result, setResult] = useState<LotteryResult | null>(null);
   const [checkNumber, setCheckNumber] = useState("");
   const [isChecking, setIsChecking] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [checkResult, setCheckResult] = useState<{ isWin: boolean; prizes: string[] }>({ isWin: false, prizes: [] });
 
-  // useEffect removed: data fetching handled by trpc hook
+  useEffect(() => {
+    const fetchResult = async () => {
+      const data = await getLatestLottery();
+      setResult(data);
+    };
+    fetchResult();
+  }, []);
 
   const handleCheck = async () => {
     if (checkNumber.length !== 6) {
@@ -32,7 +37,7 @@ export function LatestResult() {
     setShowPopup(true);
   };
 
-  if (isLoading || !result) return <div className="animate-pulse h-64 bg-white/5 rounded-xl"></div>;
+  if (!result) return <div className="animate-pulse h-64 bg-white/5 rounded-xl"></div>;
 
   const firstPrize = result.prizes.find(p => p.id === "prizeFirst")?.number[0];
   const lastTwo = result.runningNumbers.find(p => p.id === "runningNumberBackTwo")?.number[0];
@@ -52,7 +57,7 @@ export function LatestResult() {
               <Trophy className="w-5 h-5" />
               ผลสลากกินแบ่งรัฐบาลล่าสุด ({result.date})
             </CardTitle>
-            <ShareButtons
+            <ShareButtons 
               lotteryResult={{
                 firstPrize: firstPrize,
                 lastTwo: lastTwo,
@@ -66,7 +71,7 @@ export function LatestResult() {
         <CardContent className="space-y-6 relative z-10">
           <div className="text-center space-y-2">
             <p className="text-white/60 text-sm">รางวัลที่ 1</p>
-            <motion.div
+            <motion.div 
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="text-5xl sm:text-6xl font-bold text-neon-cyan font-mono tracking-wider"
@@ -92,10 +97,10 @@ export function LatestResult() {
         </CardContent>
       </Card>
 
-      <ResultPopup
-        isOpen={showPopup}
-        onClose={() => setShowPopup(false)}
-        isWin={checkResult.isWin}
+      <ResultPopup 
+        isOpen={showPopup} 
+        onClose={() => setShowPopup(false)} 
+        isWin={checkResult.isWin} 
         prizes={checkResult.prizes}
         number={checkNumber}
       />
@@ -110,13 +115,13 @@ export function LatestResult() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-2">
-            <Input
-              placeholder="กรอกเลขลอตเตอรี่ 6 หลัก"
+            <Input 
+              placeholder="กรอกเลขลอตเตอรี่ 6 หลัก" 
               value={checkNumber}
               onChange={(e) => setCheckNumber(e.target.value.replace(/\D/g, '').slice(0, 6))}
               className="bg-white/5 border-white/10 text-lg text-center tracking-widest font-mono h-12"
             />
-            <Button
+            <Button 
               onClick={handleCheck}
               disabled={isChecking}
               className="bg-neon-cyan text-black hover:bg-cyan-400 font-bold h-12 px-6"

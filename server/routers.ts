@@ -3,10 +3,10 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import {
-  trackPageView,
-  getOrCreateSession,
-  getDashboardStats,
+import { 
+  trackPageView, 
+  getOrCreateSession, 
+  getDashboardStats, 
   getRecentUsers,
   getAllUsers,
   getVisitorStats,
@@ -15,14 +15,13 @@ import {
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { getLiveStreamStatus, searchLotteryStreams } from "./youtube";
-import {
-  checkRateLimit,
-  getApiUsageStats,
+import { 
+  checkRateLimit, 
+  getApiUsageStats, 
   getRateLimitStatus,
   getRateLimitConfigs,
   trackApiUsage
 } from "./rateLimitAgent";
-import { fetchLatestLotteryData, getLotteryHistory } from "./lotteryService";
 
 // Admin-only procedure
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -36,20 +35,20 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 const rateLimitedProcedure = (endpointType: string) => publicProcedure.use(({ ctx, next }) => {
   const identifier = ctx.req.ip || ctx.req.headers['x-forwarded-for'] as string || 'anonymous';
   const result = checkRateLimit(identifier, endpointType);
-
+  
   if (!result.allowed) {
-    throw new TRPCError({
-      code: 'TOO_MANY_REQUESTS',
+    throw new TRPCError({ 
+      code: 'TOO_MANY_REQUESTS', 
       message: result.message || 'Rate limit exceeded'
     });
   }
-
+  
   return next({ ctx });
 });
 
 export const appRouter = router({
   system: systemRouter,
-
+  
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -82,9 +81,9 @@ export const appRouter = router({
             deviceType: input.deviceType,
             browser: input.browser,
           });
-
+          
           await getOrCreateSession(input.sessionId, ctx.user?.id);
-
+          
           trackApiUsage('analytics.trackPageView', true, false, Date.now() - startTime);
           return { success: true };
         } catch (error) {
@@ -107,17 +106,17 @@ export const appRouter = router({
         throw error;
       }
     }),
-
+    
     getRecentUsers: adminProcedure
       .input(z.object({ limit: z.number().optional() }).optional())
       .query(async ({ input }) => {
         return getRecentUsers(input?.limit || 10);
       }),
-
+    
     getAllUsers: adminProcedure.query(async () => {
       return getAllUsers();
     }),
-
+    
     getVisitorStats: adminProcedure
       .input(z.object({ days: z.number().optional() }).optional())
       .query(async ({ input }) => {
@@ -133,12 +132,12 @@ export const appRouter = router({
           return [];
         }
       }),
-
+    
     // Rate limit monitoring
     getApiUsageStats: adminProcedure.query(() => {
       return getApiUsageStats();
     }),
-
+    
     getRateLimitConfigs: adminProcedure.query(() => {
       return getRateLimitConfigs();
     }),
@@ -151,7 +150,7 @@ export const appRouter = router({
       .query(async ({ input }) => {
         return getRecentChatMessages(input?.limit || 50);
       }),
-
+    
     sendMessage: rateLimitedProcedure('chat')
       .input(z.object({
         message: z.string().min(1).max(500),
@@ -160,7 +159,7 @@ export const appRouter = router({
       .mutation(async ({ input, ctx }) => {
         const startTime = Date.now();
         const isGuest = !ctx.user;
-
+        
         try {
           const message = await saveChatMessage({
             userId: ctx.user?.id,
@@ -168,7 +167,7 @@ export const appRouter = router({
             message: input.message,
             isGuest,
           });
-
+          
           trackApiUsage('chat.sendMessage', true, false, Date.now() - startTime);
           return message;
         } catch (error) {
@@ -191,7 +190,7 @@ export const appRouter = router({
         throw error;
       }
     }),
-
+    
     searchStreams: rateLimitedProcedure('youtube').query(async () => {
       const startTime = Date.now();
       try {
@@ -202,18 +201,6 @@ export const appRouter = router({
         trackApiUsage('youtube.searchStreams', false, false, Date.now() - startTime);
         throw error;
       }
-    }),
-  }),
-
-  // Lottery Data
-  lottery: router({
-    getLatest: publicProcedure.query(async () => {
-      // In a real app, you might want to cache this or use a cron job.
-      // For now, we attempt to fetch on user request (with DB caching inside the service).
-      return await fetchLatestLotteryData();
-    }),
-    getHistory: publicProcedure.query(async () => {
-      return await getLotteryHistory();
     }),
   }),
 

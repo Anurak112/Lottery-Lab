@@ -52,14 +52,10 @@ const trpcClient = trpc.createClient({
   ],
 });
 
-import { HelmetProvider } from "react-helmet-async";
-
 createRoot(document.getElementById("root")!).render(
   <trpc.Provider client={trpcClient} queryClient={queryClient}>
     <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
+      <App />
     </QueryClientProvider>
   </trpc.Provider>
 );

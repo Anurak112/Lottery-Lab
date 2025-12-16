@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, bigint, boolean, json } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, bigint, boolean } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -118,27 +118,3 @@ export const dailyStats = mysqlTable("daily_stats", {
 
 export type DailyStat = typeof dailyStats.$inferSelect;
 export type InsertDailyStat = typeof dailyStats.$inferInsert;
-
-/**
- * Lottery results from GLO API
- */
-export const lotteryResults = mysqlTable("lottery_results", {
-  id: int("id").autoincrement().primaryKey(),
-  /** Draw date (YYYY-MM-DD) */
-  drawDate: varchar("drawDate", { length: 10 }).notNull().unique(),
-  /** First prize number */
-  firstPrize: varchar("firstPrize", { length: 10 }).notNull(),
-  /** Last 2 digits */
-  last2: varchar("last2", { length: 5 }).notNull(),
-  /** Front 3 digits (stored as JSON array string) */
-  front3: json("front3").notNull(),
-  /** Back 3 digits (stored as JSON array string) */
-  back3: json("back3").notNull(),
-  /** Complete raw data for future proofing */
-  fullData: json("fullData"),
-  /** Timestamp of record creation */
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type LotteryResult = typeof lotteryResults.$inferSelect;
-export type InsertLotteryResult = typeof lotteryResults.$inferInsert;

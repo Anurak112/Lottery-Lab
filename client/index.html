@@ -1,23 +1,41 @@
 <!doctype html>
 <html lang="th">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <!-- SEO Meta Tags are managed by React Helmet in src/components/SEO.tsx -->
-  <title>Lottery Lab - Thai Lottery Analytics</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>ตรวจหวย ผลสลากกินแบ่งรัฐบาล | Lottery Lab Thailand</title>
+    <meta name="description" content="ตรวจหวยออนไลน์ ผลสลากกินแบ่งรัฐบาลล่าสุด ดูถ่ายทอดสด วิเคราะห์สถิติหวยย้อนหลัง 10 ปี พร้อมแชทสดกับชุมชนคนรักหวย" />
+    <meta name="keywords" content="ตรวจหวย, ผลสลากกินแบ่งรัฐบาล, หวยรัฐบาล, ถ่ายทอดสดหวย, สถิติหวย, เลขเด็ด, หวยออนไลน์, lottery thailand, thai lottery" />
+    <meta name="author" content="Lottery Lab Thailand" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ตรวจหวย ผลสลากกินแบ่งรัฐบาล | Lottery Lab Thailand" />
+    <meta property="og:description" content="ตรวจหวยออนไลน์ ผลสลากกินแบ่งรัฐบาลล่าสุด ดูถ่ายทอดสด วิเคราะห์สถิติหวยย้อนหลัง 10 ปี" />
+    <meta property="og:locale" content="th_TH" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ตรวจหวย ผลสลากกินแบ่งรัฐบาล | Lottery Lab Thailand" />
+    <meta name="twitter:description" content="ตรวจหวยออนไลน์ ผลสลากกินแบ่งรัฐบาลล่าสุด ดูถ่ายทอดสด วิเคราะห์สถิติหวยย้อนหลัง 10 ปี" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
-</head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+  </body>
 
 </html>
