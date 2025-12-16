@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1765869108933,
+      "tag": "0000_little_zzzax",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1765869209711,
+      "tag": "0001_useful_golden_guardian",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1765877068272,
+      "tag": "0002_living_celestials",
+      "breakpoints": true
+    }
+  ]
+}
