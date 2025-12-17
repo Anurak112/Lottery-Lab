@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { stripeRouter } from "./stripeRouter";
 import { z } from "zod";
 import { 
   trackPageView, 
@@ -48,6 +49,7 @@ const rateLimitedProcedure = (endpointType: string) => publicProcedure.use(({ ct
 
 export const appRouter = router({
   system: systemRouter,
+  stripe: stripeRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

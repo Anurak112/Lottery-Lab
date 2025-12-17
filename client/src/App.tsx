@@ -11,6 +11,10 @@ import { SkeletonStatsGrid, SkeletonVideoPlayer } from "@/shared/components/Skel
 const Home = lazy(() => import("@/pages/Home"));
 const Stats = lazy(() => import("@/pages/Stats"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+const Upgrade = lazy(() => import("@/pages/Upgrade"));
+const PaymentSuccess = lazy(() => import("@/pages/PaymentSuccess"));
+const PaymentCancel = lazy(() => import("@/pages/PaymentCancel"));
+const ProDashboard = lazy(() => import("@/pages/ProDashboard"));
 
 // Loading fallback component
 function PageLoader() {
@@ -31,6 +35,10 @@ function Router() {
         <Route path={"/"} component={Home} />
         <Route path={"/admin"} component={AdminDashboard} />
         <Route path={"/stats"} component={Stats} />
+        <Route path={"/upgrade"} component={Upgrade} />
+        <Route path={"/payment/success"} component={PaymentSuccess} />
+        <Route path={"/payment/cancel"} component={PaymentCancel} />
+        <Route path={"/pro"} component={ProDashboard} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />

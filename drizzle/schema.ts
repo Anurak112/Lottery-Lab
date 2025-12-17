@@ -118,3 +118,31 @@ export const dailyStats = mysqlTable("daily_stats", {
 
 export type DailyStat = typeof dailyStats.$inferSelect;
 export type InsertDailyStat = typeof dailyStats.$inferInsert;
+
+/**
+ * Subscriptions table for managing user tiers (Free/Pro)
+ */
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  /** User ID from users table */
+  userId: int("userId").notNull(),
+  /** Subscription tier: free, pro */
+  tier: mysqlEnum("tier", ["free", "pro"]).default("free").notNull(),
+  /** Subscription status: active, cancelled, expired */
+  status: mysqlEnum("status", ["active", "cancelled", "expired"]).default("active").notNull(),
+  /** Stripe subscription ID */
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  /** Stripe customer ID */
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+  /** Subscription start date */
+  startDate: timestamp("startDate").defaultNow().notNull(),
+  /** Subscription end date */
+  endDate: timestamp("endDate"),
+  /** Created timestamp */
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  /** Updated timestamp */
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = typeof subscriptions.$inferInsert;
